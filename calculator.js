@@ -1,0 +1,49 @@
+/*
+
+Taken an input mathematical expression and generate the token stream
+Parse the token stream
+Output the tree
+Output the original expression from the tree
+Output the expression in reverse Polish notation
+Calculate the result of the expression
+
+*/
+
+function Calculator(str){
+  this.tokenTypes = [
+    ["NUMBER",    /^\d+/ ],
+    ["ADD",       /^\+/  ],
+    ["SUB",       /^\-/  ],
+    ["MUL",       /^\*/  ],
+    ["DIV",       /^\//  ],
+    ["LPAREN",    /^\(/  ],
+    ["RPAREN",    /^\)/  ]
+  ];
+  this.tokenStream = this.lexer(str);
+
+}
+
+
+Calculator.prototype.lexer = function(str){
+  var final = [];
+  var unparsedStr = str;
+
+  while(unparsedStr.length){
+    for(var i = 0; i < this.tokenTypes.length ; i++){
+      var currentRegEx = this.tokenTypes[i][1];
+      var regExName = this.tokenTypes[i][0];
+      var fragment = unparsedStr.match(currentRegEx);
+
+      if(fragment){
+        final.push({name: regExName, value: fragment});
+        unparsedStr = unparsedStr.slice(fragment.length);
+      }
+    }
+  }
+  console.log(final);
+  return final;
+}
+
+Calculator.prototype.peek = function(){};
+
+Calculator.prototype.get = function(){};
