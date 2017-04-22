@@ -9,41 +9,65 @@ Calculate the result of the expression
 
 */
 
-function Calculator(str){
-  this.tokenTypes = [
-    ["NUMBER",    /^\d+/ ],
-    ["ADD",       /^\+/  ],
-    ["SUB",       /^\-/  ],
-    ["MUL",       /^\*/  ],
-    ["DIV",       /^\//  ],
-    ["LPAREN",    /^\(/  ],
-    ["RPAREN",    /^\)/  ]
-  ];
-  this.tokenStream = this.lexer(str);
+function Calculator(str) {
+    this.tokenTypes = [
+        ["NUMBER", /^\d+/],
+        ["ADD", /^\+/],
+        ["SUB", /^\-/],
+        ["MUL", /^\*/],
+        ["DIV", /^\//],
+        ["LPAREN", /^\(/],
+        ["RPAREN", /^\)/]
+    ];
+    this.tokenStream = this.lexer(str);
 
 }
 
 
-Calculator.prototype.lexer = function(str){
-  var final = [];
-  var unparsedStr = str;
+Calculator.prototype.lexer = function(str) {
+    var final = [];
+    var unparsedStr = str;
 
-  while(unparsedStr.length){
-    for(var i = 0; i < this.tokenTypes.length ; i++){
-      var currentRegEx = this.tokenTypes[i][1];
-      var regExName = this.tokenTypes[i][0];
-      var fragment = unparsedStr.match(currentRegEx);
+    while (unparsedStr.length) {
+        for (var i = 0; i < this.tokenTypes.length; i++) {
+            var currentRegEx = this.tokenTypes[i][1];
+            var regExName = this.tokenTypes[i][0];
+            var fragment = unparsedStr.match(currentRegEx);
 
-      if(fragment){
-        final.push({name: regExName, value: fragment});
-        unparsedStr = unparsedStr.slice(fragment.length);
-      }
+            if (fragment) {
+                final.push({ name: regExName, value: fragment[0] });
+                unparsedStr = unparsedStr.slice(fragment[0].length);
+            }
+        }
     }
-  }
-  console.log(final);
-  return final;
+
+    return final;
 }
 
-Calculator.prototype.peek = function(){};
+Calculator.prototype.peek = function() {
 
-Calculator.prototype.get = function(){};
+
+    return this.tokenStream[0] || null;
+
+
+};
+
+Calculator.prototype.get = function() {
+
+    return this.tokenStream.shift();
+
+};
+
+Calculator.prototype.parseExpression = function() {
+    //goal is to return a TreeNode
+
+}
+
+
+function TreeNode(name) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    this.name = name;
+    this.children = args;
+
+
+}
